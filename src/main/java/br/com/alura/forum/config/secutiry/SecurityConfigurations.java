@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -30,15 +31,17 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()//
 				.antMatchers(HttpMethod.GET, "/topicos").permitAll()//
 				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()//
+				.antMatchers(HttpMethod.POST, "/auth").permitAll()//
 				.anyRequest().authenticated()//
-				.and().formLogin();
+				.and().csrf().disable()//
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	// Configuração de recusos (js, css, imagens etc.)
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(new BCryptPasswordEncoder().encode("123456"));
 	}
